@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/codigo_qr_de_pago"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/amount_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Monto: $0.00 CUP"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="16dp" />
+
+    <ImageView
+        android:id="@+id/qr_image_view"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="24dp"
+        android:background="@android:color/white"
+        android:padding="8dp"
+        android:scaleType="fitCenter" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/open_app_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/abrir_transfermovil"
+            android:layout_marginEnd="8dp" />
+
+        <Button
+            android:id="@+id/close_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cerrar"
+            android:layout_marginStart="8dp" />
+
+    </LinearLayout>
+
+</LinearLayout>
