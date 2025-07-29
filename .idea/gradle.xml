@@ -10,8 +10,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/app/apklis_license_validator" />
+            <option value="$PROJECT_DIR$/apklis_license_validator" />
           </set>
         </option>
       </GradleProjectSettings>

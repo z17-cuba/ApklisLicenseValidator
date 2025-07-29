@@ -11,6 +11,7 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
@@ -20,5 +21,4 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "ApklisLicenseValidator"
-include(":app")
-include(":app:apklis_license_validator")
+include(":apklis_license_validator")

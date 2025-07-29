@@ -56,10 +56,10 @@ afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
+                from(components["release"])
                 groupId = "cu.uci.android"
                 artifactId = "apklis_license_validator"
-                version = "0.0.2"
-                from(components["release"])
+                version = "0.0.3"
             }
         }
     }
@@ -75,19 +75,20 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Additional dependencies from the library
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.okhttp)
+
     // Because WebSocketLib is a custom implementation on top of OkHttp's WebSocket:
-    implementation("com.squareup.okhttp3:okhttp-urlconnection:4.10.0")
+    implementation(libs.okhttp.urlconnection)
 
     // Optional for better JSON parsing
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation(libs.gson)
 
     // QR Code generation/view
-    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
-    implementation("com.google.zxing:core:3.5.2")
-    implementation("com.lightspark:compose-qr-code:1.0.1")
+    implementation(libs.zxing.android.embedded)
+    implementation(libs.zxing.core)
+    implementation(libs.compose.qr.code)
 
-    // Dependencias para criptografía
-    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+    // Cryptography library
+    implementation(libs.security.crypto)
 }
