@@ -10,9 +10,14 @@ Add this to your app's `build.gradle` file:
 repositories {
     maven { url 'https://jitpack.io' }
 }
+```
+And then head to [Jitpack's website](https://jitpack.io/#z17-Cuba/ApklisLicenseValidator) to check for the latest release of the plugin to import it in your app.
+The latest release to date is:
 
+```gradle
 dependencies {
-    implementation 'com.github.z17-Cuba:ApklisLicenseValidatorLib:02e262fc1a'
+    //Always remember to check the latest release of the library
+   implementation("com.github.z17-Cuba:ApklisLicenseValidator:v.0.0.4")
 }
 ```
 
