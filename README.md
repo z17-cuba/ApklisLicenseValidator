@@ -4,14 +4,14 @@ A Kotlin library for license validation through the Apklis platform. This librar
 
 ## Installation
 
-Add this to your app's `build.gradle` file:
+1. Add this to your app's `build.gradle` file:
 
 ```gradle
 repositories {
     maven { url 'https://jitpack.io' }
 }
 ```
-And then head to [Jitpack's website](https://jitpack.io/#z17-Cuba/ApklisLicenseValidator) to check for the latest release of the plugin to import it in your app.
+2. Then head to [Jitpack's website](https://jitpack.io/#z17-Cuba/ApklisLicenseValidator) to check for the latest release of the plugin to import it in your app.
 The latest release to date is:
 
 ```gradle
@@ -20,6 +20,8 @@ dependencies {
    implementation("com.github.z17-Cuba:ApklisLicenseValidator:v.0.0.4")
 }
 ```
+
+3. And finally the encryption key generated for each developer (unique for each license-group) must be placed under the path **android/src/main/assets/license_private_key.pub**. This key is used to perform the encryption check to validate that the request comes from a trusted source and to issue the validation accordingly.
 
 ## Usage
 
