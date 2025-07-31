@@ -1,39 +1,39 @@
 # ApklisLicenseValidator
 
-A Kotlin library for license validation through the Apklis platform. This library provides methods to purchase and verify licenses in Android applications.
+La biblioteca en Kotlin para la validación de licencias a través de la plataforma Apklis. Esta biblioteca proporciona métodos para comprar y verificar licencias en aplicaciones Android.
 
-## Installation
+## Instalación
 
-1. Add this to your app's `build.gradle` file:
+1. Añade esto al archivo `build.gradle` de tu aplicación:
 
 ```gradle
 repositories {
     maven { url 'https://jitpack.io' }
 }
 ```
-2. Then head to [Jitpack's website](https://jitpack.io/#z17-Cuba/ApklisLicenseValidator) to check for the latest release of the plugin to import it in your app.
-The latest release to date is:
+2. A continuación, dirígete a [la página web de Jitpack](https://jitpack.io/#z17-Cuba/ApklisLicenseValidator) para comprobar cuál es la última versión de la librería e importarla a tu aplicación.
+La última versión hasta la fecha es:
 
 ```gradle
 dependencies {
-    //Always remember to check the latest release of the library
+    //Recuerda siempre consultar la última versión de la biblioteca.
    implementation("com.github.z17-Cuba:ApklisLicenseValidator:v.0.0.4")
 }
 ```
 
-3. And finally the encryption key generated for each developer (unique for each license-group) must be placed under the path **android/src/main/assets/license_private_key.pub**. This key is used to perform the encryption check to validate that the request comes from a trusted source and to issue the validation accordingly.
+3. Por último, la clave de cifrado generada para cada desarrollador (única para cada grupo de licencias) debe colocarse en la ruta **android/src/main/assets/license_private_key.pub**. Esta clave se utiliza para realizar la comprobación de cifrado con el fin de validar que la solicitud proviene de una fuente fiable y emitir la validación correspondiente.
 
-## Usage
+## Uso
 
-The library provides two main methods:
-- `purchaseLicense()` - Purchase a license with a given UUID
-- `verifyCurrentLicense()` - Verify the current license for a package
-The library provides also structured error handling through the `LicenseError` class.
+La biblioteca proporciona dos métodos principales:
+- `purchaseLicense()`: compra una licencia con un UUID determinado.
+- `verifyCurrentLicense()`: verifica la licencia actual de un paquete.
+La biblioteca también proporciona un manejo estructurado de errores a través de la clase `LicenseError`.
 
-### 1. Instance-based Usage
-Create an instance of `ApklisLicenseValidator` and call methods on it:
+### 1. Uso basado en instancias
+Cree una instancia de `ApklisLicenseValidator` y llame a los métodos que contiene:
 
-#### Purchase License
+#### Comprar licencia
 ```kotlin
 val validator = ApklisLicenseValidator()
 
@@ -78,7 +78,7 @@ Log.d("License", "Purchase successful: $response")
 })
 ```
 
-#### Verify Current License
+#### Verificar licencia activa
 ```kotlin
 val validator = ApklisLicenseValidator()
 
@@ -122,10 +122,10 @@ validator.verifyCurrentLicense(context, "com.example.myapp", object : LicenseCal
 })
 ```
 
-### 2. Static Utility Methods
-Use the static utility methods from `ApklisLicenseUtils` for quick access:
+### 2. Métodos de acceso estáticos
+Utilice los métodos de acceso estáticos de `ApklisLicenseUtils` para un acceso rápido:
 
-#### Purchase License
+#### Comprar licencia
 ```kotlin
 ApklisLicenseUtils.purchaseLicense(context, "your-license-uuid", object : LicenseCallback {
     override fun onSuccess(response: Map<String, Any>) {
@@ -159,7 +159,7 @@ ApklisLicenseUtils.purchaseLicense(context, "your-license-uuid", object : Licens
 })
 ```
 
-#### Verify Current License
+#### Verificar licencia activa
 ```kotlin
 ApklisLicenseUtils.verifyCurrentLicense(context, "com.example.myapp", object : LicenseCallback {
     override fun onSuccess(response: Map<String, Any>) {
@@ -192,13 +192,13 @@ ApklisLicenseUtils.verifyCurrentLicense(context, "com.example.myapp", object : L
 })
 ```
 
-## Response Format
+## Formato de respuesta
 
-### Purchase License Response
+### Respuesta de compra de licencia
 
-On successful purchase, the response contains:
+Si la compra se ha realizado correctamente, la respuesta contiene:
 ```kotlin
-// Successful payment completion
+// Pago completado con éxito
 mapOf(
     "success" to true,
     "paid" to true,
@@ -206,7 +206,7 @@ mapOf(
     "username" to "user-account-name"
 )
 
-// Payment dialog closed by user
+// El usuario ha cerrado el cuadro de diálogo de pago
 mapOf(
     "success" to false,
     "paid" to false,
@@ -214,7 +214,7 @@ mapOf(
     "username" to "user-account-name"
 )
 
-// Error during payment process
+// Error durante el proceso de pago
 mapOf(
     "error" to "error-message",
     "paid" to false,
@@ -222,54 +222,90 @@ mapOf(
 )
 ```
 
-### Verify License Response
-On successful verification, the response contains:
+###  Respuesta de verificación de licencia activa
+Si la verificación se realiza correctamente, la respuesta contiene:
 
 ```kotlin
-// Valid license found
+// Se ha encontrado una licencia válida.
 mapOf(
     "license" to "license-name-string",
     "paid" to true,
     "username" to "user-account-name"
 )
 
-// No valid license
+// No hay licencia válida
 mapOf(
     "license" to "",
     "paid" to false,
     "username" to "user-account-name"
 )
 
-// Error during verification
+//  Error durante la verificación
 mapOf(
     "error" to "error-message",
     "username" to "user-account-name",
-    "status_code" to httpStatusCode  // Optional, only on API errors
+    "status_code" to httpStatusCode  // Opcional, solo en errores de API
 )
 ```
 
-## Error Handling
+## Manejo de errores
 ```kotlin
 data class LicenseError(
-    val code: String,       // Error code (e.g., "PURCHASE_ERROR", "VERIFY_ERROR")
-    val message: String,    // Human-readable error message
-    val exception: Exception? // Original exception if available
+    val code: String,        // Código de error (por ejemplo, «PURCHASE_ERROR», «VERIFY_ERROR»)
+    val message: String,     // Mensaje de error legible para el usuario
+    val exception: Exception? // Excepción original, si está disponible
 )
 ```
 
-### Common Error Codes
+###  Códigos de error comunes
 
-| Code | Description |
+| Código | Descripción |
 |------|-------------|
-| `INVALID_ARGUMENT` | Invalid or empty license UUID/package ID |
-| `PURCHASE_ERROR` | General purchase operation failure |
-| `PURCHASE_FAILED` | No response received from purchase operation |
-| `VERIFY_ERROR` | General verification operation failure |
-| `VERIFICATION_FAILED` | No response received from verification operation |
+| `INVALID_ARGUMENT` | UUID de licencia/ID de paquete no válido o vacío |
+| `PURCHASE_ERROR` | Error general en la operación de compra |
+| `PURCHASE_FAILED` | No se ha recibido respuesta de la operación de compra |
+| `VERIFY_ERROR` | Error general en la operación de verificación |
+| `VERIFICATION_FAILED` | No se ha recibido respuesta de la operación de verificación |
 
 
-## Complete Example
-Here's a complete example showing both methods in an Android Activity:
+## Estructura y clases nativas de Kotlin
+
+- **📁 api_helpers**: Carpeta con las clases requeridas para hacer las peticiones a la API de Apklis (**`ApiService.kt`** 🌐), para un wrapper de las respuestas de la API, ya sean de éxito o error y manejar de forma más eficiente cada estado de la verificación (**`ApiResult.kt`** ✅❌), y el interceptor para leer y probar de forma más cómoda el intercambio entre la API y el plugin (**`LoggingInterceptor.kt`** 📋).
+
+- **📁 models**: Carpeta con las clases de dato (o modelos) requeridas para hacer/o leer las peticiones a la API de Apklis 📄.
+
+- **📁 signature_helper**: Carpeta con la clase que se encarga de validar que la petición a la API de Apklis y su respuesta se realizan de forma segura y sin intermediarios (**`SignatureVerificationService.kt`** 🔐).
+
+- **🔌 `ApklisDataGetter.kt`**: Clase se llama mediante la app de ejemplo en Flutter para obtener los datos del Provider expuesto en la app de Apklis necesarios para la validación.
+
+- **🔌 `ApklisLicenseValidatorPlugin.kt`**: Clase padre que se llama mediante la app de ejemplo en Flutter que reconoce los métodos llamativos y devuelve los valores/errores.
+
+- **⚙️ `PurchaseAndVerify.kt`**: Clase que contiene los métodos a llamar desde la clase padre **`ApklisLicenseValidatorPlugin`** y que contiene la lógica de la verificación y pago de licencias 💳.
+
+- **📱 `QRDialogManager.kt`**: Clase que se encarga de manejar, dibujar y mostrar el código QR del pago de Transfermóvil 📲.
+
+- **🔌 `WebSocketClient.kt` + `WebSocketService.kt`**: Clase (y servicio) que se encarga de conectarse a un servidor WebSocket para la retroalimentación inmediata del pago y el estado de la licencia en el dispositivo (incluso en 2do plano) ⚡. De forma automática se encarga de la conexión al canal de la licencia asociada al dispositivo y al usuario, de la reconexión cada cierto tiempo para evitar desconexiones y de cerrar la conexión cuando ha terminado para ahorrar recursos 🔄.
+
+
+### FAQs - Errores conocidos
+
+Este error fue reportado en un Xiaomi Redmi Note 11 con Android 11 (pero no está ligado solo a ese dispositivo específico):
+Si te da error 403 con las credenciales de manera repetida, y ya agotaste las opciones:
+1. Iniciar sesión
+2. Hacer alguna acción para se refresque el token si expiró
+3. Cerrar sesión y volver a iniciar
+4. Revisar que Apklis esté en 2do plano
+5. Revisar en la sección de Ajustes del teléfono -> Cuentas y sincronización, y comprobar que el usuario/cuenta de Apklis se está creando correctamente
+
+Entonces se sugiere agregar esta línea en el Android Manifest de su aplicación:
+```xml
+<queries>
+<package android:name="cu.uci.android.apklis" />
+</queries>
+```
+
+## Ejemplo completo
+A continuación se muestra un ejemplo completo que muestra ambos métodos en una actividad de Android:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -340,8 +376,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
-
-## Threading
-- All callbacks are executed on the **Main Thread** for UI updates
-- Network operations are performed on **Background Threads** automatically
-- No need to handle threading manually
