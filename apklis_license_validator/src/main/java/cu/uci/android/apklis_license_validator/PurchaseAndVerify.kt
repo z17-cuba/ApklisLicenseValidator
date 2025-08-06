@@ -127,10 +127,14 @@ class PurchaseAndVerify {
                     // Resume with error if WebSocket fails to connect
                     if (!isResumed) {
                         isResumed = true
-                        continuation.resume(buildMap<String, Any> {
-                            put("error", "WebSocket connection failed: $error")
-                            put("username", apklisAccountData?.username ?: "")
-                        })
+                         try {
+                            continuation.resume(buildMap<String, Any> {
+                                put("error", "WebSocket connection failed: $error")
+                                put("username", apklisAccountData?.username ?: "")
+                            })
+                        } catch (e: IllegalStateException) {
+                            Log.d(TAG, "Continuation already resumed, ignoring WebSocket error: $error")
+                        }
                     }
                 }
             })
@@ -150,10 +154,14 @@ class PurchaseAndVerify {
                 Log.e(TAG, "Error initializing WebSocket: ${e.message}")
                 if (!isResumed) {
                     isResumed = true
-                    continuation.resume(buildMap<String, Any> {
-                        put("error", "Failed to initialize WebSocket: ${e.message}")
-                        put("username", apklisAccountData?.username ?: "")
-                    })
+                     try {
+                        continuation.resume(buildMap<String, Any> {
+                            put("error", "Failed to initialize WebSocket: ${e.message}")
+                            put("username", apklisAccountData?.username ?: "")
+                        })
+                    } catch (ex: IllegalStateException) {
+                        Log.d(TAG, "Continuation already resumed, ignoring WebSocket initialization error")
+                    }
                 }
             }
         }
@@ -173,35 +181,47 @@ class PurchaseAndVerify {
                 override fun onPaymentCompleted(licenseName: String) {
                     Log.d(TAG, "Payment completed with license: $licenseName")
                     if (continuation.isActive) {
-                        continuation.resume(buildMap {
-                            put("success", true)
-                            put("paid", true)
-                            put("license", licenseName)
-                            put("username", username)
-                        })
+                         try {
+                            continuation.resume(buildMap {
+                                put("success", true)
+                                put("paid", true)
+                                put("license", licenseName)
+                                put("username", username)
+                            })
+                        } catch (e: IllegalStateException) {
+                            Log.d(TAG, "Continuation already resumed, ignoring payment completion")
+                        }
                     }
                 }
 
                 override fun onPaymentFailed(error: String) {
                     Log.e(TAG, "Payment failed: $error")
                     if (continuation.isActive) {
-                        continuation.resume(buildMap {
-                            put("error", error)
-                            put("paid", false)
-                            put("username",username)
-                        })
+                        try {
+                            continuation.resume(buildMap {
+                                put("error", error)
+                                put("paid", false)
+                                put("username", username)
+                            })
+                        } catch (e: IllegalStateException) {
+                            Log.d(TAG, "Continuation already resumed, ignoring payment failure")
+                        }
                     }
                 }
 
                 override fun onDialogClosed() {
                     Log.d(TAG, "Dialog was closed by user")
                     if (continuation.isActive) {
-                        continuation.resume(buildMap {
-                            put("success", false)
-                            put("paid", false)
-                            put("error", "Dialog closed by user")
-                            put("username", username)
-                        })
+                        try {
+                            continuation.resume(buildMap {
+                                put("success", false)
+                                put("paid", false)
+                                put("error", "Dialog closed by user")
+                                put("username", username)
+                            })
+                        } catch (e: IllegalStateException) {
+                            Log.d(TAG, "Continuation already resumed, ignoring dialog close")
+                        }
                     }
                 }
             }
@@ -217,11 +237,15 @@ class PurchaseAndVerify {
                     val errorMessage = "Failed to show dialog"
                     Log.e(TAG, errorMessage)
                     if (continuation.isActive) {
-                        continuation.resume(buildMap {
-                            put("error", errorMessage)
-                            put("paid", false)
-                            put("username", username)
-                        })
+                          try {
+                            continuation.resume(buildMap {
+                                put("error", errorMessage)
+                                put("paid", false)
+                                put("username", username)
+                            })
+                        } catch (e: IllegalStateException) {
+                            Log.d(TAG, "Continuation already resumed, ignoring dialog show failure")
+                        }
                     }
                 }
             }
