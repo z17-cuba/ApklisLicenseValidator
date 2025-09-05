@@ -17,7 +17,7 @@ La última versión hasta la fecha es:
 ```gradle
 dependencies {
     //Recuerda siempre consultar la última versión de la biblioteca.
-   implementation("com.github.z17-Cuba:ApklisLicenseValidator:v.0.0.4")
+   implementation("com.github.z17-Cuba:ApklisLicenseValidator:v.0.0.6")
 }
 ```
 

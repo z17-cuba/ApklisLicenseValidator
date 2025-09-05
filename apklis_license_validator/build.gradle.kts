@@ -59,7 +59,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "cu.uci.android"
                 artifactId = "apklis_license_validator"
-                version = "0.0.4"
+                version = "0.0.6"
             }
         }
     }
