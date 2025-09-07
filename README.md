@@ -21,7 +21,7 @@ dependencies {
 }
 ```
 
-3. Por último, la clave de cifrado generada para cada desarrollador (única para cada grupo de licencias) debe colocarse en la ruta **android/src/main/assets/license_private_key.pub**. Esta clave se utiliza para realizar la comprobación de cifrado con el fin de validar que la solicitud proviene de una fuente fiable y emitir la validación correspondiente.
+3. Por último, la clave de cifrado generada para cada desarrollador (única para cada grupo de licencias) debe colocarse en la ruta **android/app/src/main/assets/license_private_key.pub**. Esta clave se utiliza para realizar la comprobación de cifrado con el fin de validar que la solicitud proviene de una fuente fiable y emitir la validación correspondiente.
 
 ## Uso
 
