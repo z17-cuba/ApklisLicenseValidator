@@ -37,9 +37,7 @@ class QrDialogActivity : Activity(), WebSocketEventListener {
     companion object {
         private const val TAG = "QrDialogActivity"
         private const val WEBSOCKET_CHECK_DELAY = 2000L // 2 seconds
-        //  private const val TRANSFERMOVILPKGNAME  = "cu.etecsa.cubacel.tr.tm"
-        //TODO borrar este packageName
-        const val TRANSFERMOVILPKGNAME = "cu.etecsa.cubacel.tr.tmtest"
+        private const val TRANSFERMOVILPKGNAME  = "cu.etecsa.cubacel.tr.tm"
     }
 
     private lateinit var qr: QrCode

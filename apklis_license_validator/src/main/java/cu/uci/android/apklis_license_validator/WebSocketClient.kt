@@ -421,7 +421,7 @@ class WebSocketClient(
 
    private fun subscribeToChannel(code: String, channel: String) {
        val subscriptionId = generateId()
-       val channelName = "APKLIS_DEVICES_TEST.$code.$channel"
+       val channelName = "APKLIS_DEVICES.$code.$channel"
        val subMsg = "SUB $channelName $subscriptionId\r\n"
 
        if (_connectionState.value.isConnected) {

@@ -28,7 +28,7 @@ class ApiService {
     companion object {
         private const val TIMEOUT = 30_000L // 30 segundos
         private const val TAG = "PaymentApiServiceImpl" // Para el Logger
-       private const val APKLIS_BASE_URL = "https://apitest.apklis.cu"
+       private const val APKLIS_BASE_URL = "https://api.apklis.cu"
         private const val APKLIS_LICENSE_URL = "license/v1/license"
     }
 
