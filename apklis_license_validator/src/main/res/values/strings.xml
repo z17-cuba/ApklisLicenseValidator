@@ -1,6 +1,63 @@
 <resources>
     <string name="app_name">Apklis License Validator Lib</string>
-    <string name="abrir_transfermovil">Abrir Transfermóvil</string>
-    <string name="cerrar">Cerrar</string>
-    <string name="codigo_qr_de_pago">Código QR de Pago</string>
+    <string name="abrir_transfermovil">Open Transfermóvil</string>
+    <string name="cerrar">Close</string>
+    <string name="codigo_qr_de_pago">QR Payment Code</string>
+    
+    <!-- PurchaseAndVerify Strings -->
+    <string name="error_invalid_response_signature">Invalid response signature</string>
+    <string name="error_payment_failed_with_code">Payment error %1$s: %2$s</string> <!-- %1$s is for status code, %2$s for message -->
+    <string name="error_payment_failed">Payment failed %1$s</string> <!-- %1$s is for message  -->
+    <string name="payment_completed">Payment completed with license: %1$s</string> <!-- %1$s is for license name  -->
+    <string name="error_payment_exception">Exception during payment: %1$s</string> <!-- %1$s is for exception message -->
+    <string name="license_already_exists">Already exists a license: %1$s</string> <!-- %1$s is for license name  -->
+    <string name="error_websocket_connection_failed">WebSocket connection failed: %1$s</string> <!-- %1$s is for error detail -->
+    <string name="error_websocket_init_failed">Failed to initialize WebSocket: %1$s</string> <!-- %1$s is for error detail -->
+    <string name="dialog_closed_by_user">Dialog closed by user</string>
+    <string name="error_failed_to_show_dialog">Failed to show dialog</string>
+    <string name="error_verification_failed_with_code">Verification error %1$s: %2$s</string> <!-- %1$s is for status code, %2$s for message -->
+    <string name="error_verification_exception">Exception during verification: %1$s</string> <!-- %1$s is for exception message -->
+    <string name="log_signature_verification_failed">Signature verification failed for successful response</string>
+    <string name="log_no_signature_header">No signature header found in response</string>
+    <string name="websocket_connected">WebSocket connected successfully</string>
+    <string name="websocket_connected_showing_qr_dialog">WebSocket connected, showing QR dialog</string>
+    <string name="websocket_disconnected">WebSocket disconnected: %1$s</string>
+    <string name="continuation_resumed_ignoring_websocket">Continuation already resumed, ignoring WebSocket error: %1$s</string>
+    <string name="continuation_resumed_ignoring_payment_completion">Continuation already resumed, ignoring payment completion</string>
+    <string name="continuation_resumed_ignoring_payment_failure">Continuation already resumed, ignoring payment error: %1$s</string>
+    <string name="continuation_resumed_ignoring_dialog_close">Continuation already resumed, ignoring dialog close</string>
+    <string name="continuation_resumed_ignoring_dialog_failure">Continuation already resumed, ignoring dialog failure to show</string>
+
+    <!-- ApklisDataGetter -->
+    <string name="querying_apklis_data">Querying Apklis account data…</string>
+    <string name="cursor_is_null_provider_not_available">Cursor is null - provider might not be available</string>
+    <string name="cursor_returned_with_rows">Cursor returned with %1$s rows</string>
+    <string name="retrieved_data">Retrieved: %1$s</string>
+    <string name="no_account_data_found">No account data found</string>
+    <string name="security_exception_missing_permission">SecurityException - missing permission: %1$s</string>
+    <string name="error_retrieving_account_data">Error retrieving account data: %1$s</string>
+    <string name="apklis_provider_not_available">Apklis data provider not available</string>
+
+    <!-- ApklisLicenseValidator -->
+    <string name="error_empty_license_uuid">License UUID cannot be empty</string>
+    <string name="purchasing_license">Purchasing license with UUID: %1$s</string>
+    <string name="purchase_response">Purchase response: %1$s</string>
+    <string name="no_response_from_purchase">No response received from purchase operation</string>
+    <string name="error_purchasing_license">Error purchasing license: %1$s</string>
+    <string name="error_empty_package_id">Package ID cannot be empty</string>
+    <string name="verifying_license">Verifying license for package: %1$s</string>
+    <string name="verification_response">Verification response: %1$s</string>
+    <string name="no_response_from_verification">No response received from verification operation</string>
+    <string name="error_verifying_license">Error verifying license: %1$s</string>
+
+    <!-- QRDialogManager -->
+
+    <!-- UI/General Strings -->
+    <string name="payment_successful">Payment Successful</string>
+    <string name="license_verified">License Verified</string>
+    <string name="status_paid">Paid</string>
+    <string name="status_not_paid">Not Paid</string>
+    <string name="username_label">Username</string>
+
+
 </resources>

@@ -34,7 +34,7 @@ class ApiService {
 
     /// Make a request to the Apklis API to request the TF payment QR code for the payment of licenses
     //  Display the QR code or return an error/exception status if the request fails
-    suspend fun payLicenseWithTF(request: PaymentRequest, licenseUUID: String, accessToken: String): ApiResult<QrCode> {
+    suspend fun payLicenseWithTF(request: PaymentRequest, licenseUUID: String, accessToken: String, deviceLanguage:String): ApiResult<QrCode> {
         return withContext(Dispatchers.IO) {
             try {
                 val jsonBody = gson.toJson(request)
@@ -44,6 +44,7 @@ class ApiService {
                     .url("$APKLIS_BASE_URL/$APKLIS_LICENSE_URL/$licenseUUID/pay-with-transfermovil/")
                     .post(requestBody)
                     .addHeader("Authorization", "Bearer $accessToken")
+                    .addHeader("Accept-Language", deviceLanguage)
                     .addHeader("Content-Type", "application/json")
                     .build()
 
@@ -83,7 +84,7 @@ class ApiService {
 
     /// Performs verification against the API to find out which license the user has active
     /// Returns the active license (if any)
-    suspend fun verifyCurrentLicense(request: LicenseRequest, accessToken: String): ApiResult<VerifyLicenseResponse> {
+    suspend fun verifyCurrentLicense(request: LicenseRequest, accessToken: String, deviceLanguage: String): ApiResult<VerifyLicenseResponse> {
         return withContext(Dispatchers.IO) {
             try {
                 val jsonBody = gson.toJson(request)
@@ -93,6 +94,7 @@ class ApiService {
                     .url("$APKLIS_BASE_URL/$APKLIS_LICENSE_URL/verify/")
                     .post(requestBody)
                     .addHeader("Authorization", "Bearer $accessToken")
+                    .addHeader("Accept-Language", deviceLanguage)
                     .addHeader("Content-Type", "application/json")
                     .build()
 
@@ -110,7 +112,7 @@ class ApiService {
                                 ApiResult.Exception(e)
                             }
                         } else {
-                            ApiResult.Error(response.code, "Empty response body",)
+                            ApiResult.Error(response.code, "Empty response body")
                         }
                     }
                     else -> {

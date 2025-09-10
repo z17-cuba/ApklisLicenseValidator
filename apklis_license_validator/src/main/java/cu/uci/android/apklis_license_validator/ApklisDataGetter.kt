@@ -28,7 +28,7 @@ class ApklisDataGetter {
             var cursor: Cursor? = null
 
             return try {
-                Log.d(TAG, "Querying Apklis account data...")
+                Log.d(TAG, context.getString(R.string.querying_apklis_data))
 
                 cursor = context.contentResolver.query(
                     CONTENT_URI,
@@ -39,11 +39,11 @@ class ApklisDataGetter {
                 )
 
                 if (cursor == null) {
-                    Log.e(TAG, "Cursor is null - provider might not be available")
+                    Log.e(TAG, context.getString(R.string.cursor_is_null_provider_not_available))
                     return null
                 }
 
-                Log.d(TAG, "Cursor returned with ${cursor.count} rows")
+                Log.d(TAG, context.getString(R.string.cursor_returned_with_rows, cursor.count.toString()))
 
                 if (cursor.moveToFirst()) {
                     val username = cursor.getString(COLUMN_USERNAME)
@@ -52,19 +52,19 @@ class ApklisDataGetter {
                     val code = cursor.getString(COLUMN_CODE)
 
                     val data = ApklisAccountData(username, deviceId, accessToken, code)
-                    Log.d(TAG, "Retrieved: $data")
+                    Log.d(TAG, context.getString(R.string.retrieved_data, data))
 
                     data
                 } else {
-                    Log.w(TAG, "No account data found")
+                    Log.e(TAG, context.getString(R.string.no_account_data_found))
                     null
                 }
 
             } catch (e: SecurityException) {
-                Log.e(TAG, "SecurityException - missing permission: ${e.message}")
+                Log.e(TAG, context.getString(R.string.security_exception_missing_permission, e.message))
                 null
             } catch (e: Exception) {
-                Log.e(TAG, "Error retrieving account data: ${e.message}", e)
+                Log.e(TAG, context.getString(R.string.error_retrieving_account_data, e.message))
                 null
             } finally {
                 cursor?.close()
@@ -95,7 +95,7 @@ class ApklisDataGetter {
                 cursor?.use { true } == true
 
             } catch (e: Exception) {
-                Log.d(TAG, "Apklis data provider not available: ${e.message}")
+                Log.e(TAG, context.getString(R.string.apklis_provider_not_available, e.message))
                 false
             }
         }

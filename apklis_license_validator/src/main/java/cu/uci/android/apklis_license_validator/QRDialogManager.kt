@@ -90,7 +90,7 @@ class QrDialogActivity : Activity(), WebSocketEventListener {
 
         // Find views
         val amountTextView = dialogView.findViewById<TextView>(R.id.amount_text)
-        amountTextView.text = "Monto: $${qr.importe} CUP"
+        amountTextView.text = "$${qr.importe} CUP"
 
         val qrImageView = dialogView.findViewById<ImageView>(R.id.qr_image_view)
         val openAppButton = dialogView.findViewById<Button>(R.id.open_app_button)

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Validador de licencias de Apklis</string>
+    <string name="abrir_transfermovil">Abrir Transfermóvil</string>
+    <string name="cerrar">Cerrar</string>
+    <string name="codigo_qr_de_pago">Código QR de Pago</string>
+
+    <!-- PurchaseAndVerify Strings -->
+    <string name="error_invalid_response_signature">Firma de respuesta inválida</string>
+    <string name="error_payment_failed_with_code">Error al efectuar el pago %1$s: %2$s</string>
+    <string name="error_payment_failed">Error al efectuar el pago %1$s</string> <!-- %1$s is for message  -->
+    <string name="payment_completed">Pago completado para la licencia: %1$s</string>
+    <string name="error_payment_exception">Excepción al efectuar el pago: %1$s</string>
+    <string name="license_already_exists">Ya existe una licencia: %1$s</string>
+    <string name="error_websocket_connection_failed">Falló la conexión WebSocket: %1$s</string>
+    <string name="error_websocket_init_failed">Falló la inicialización de WebSocket: %1$s</string>
+    <string name="dialog_closed_by_user">Diálogo cerrado por el usuario</string>
+    <string name="error_failed_to_show_dialog">Fallo al mostrar el diálogo</string>
+    <string name="error_verification_failed_with_code">Fallo al efectuar la verificación %1$s: %2$s</string>
+    <string name="error_verification_exception">Fallo al efectuar la verificación: %1$s</string>
+    <string name="log_signature_verification_failed">La verificación de la firma falló para una respuesta exitosa</string>
+    <string name="log_no_signature_header">No se encontró encabezado de firma en la respuesta</string>
+    <string name="websocket_connected">WebSocket se conectó exitosamente</string>
+    <string name="websocket_connected_showing_qr_dialog">WebSocket se conectó, mostrando diálogo del QR</string>
+    <string name="websocket_disconnected">WebSocket desconectado: %1$s</string>
+    <string name="continuation_resumed_ignoring_websocket">Resumido el flujo, ignorando el error de WebSocket: %1$s</string>
+    <string name="continuation_resumed_ignoring_payment_completion">Resumido el flujo, ignorando el pago</string>
+    <string name="continuation_resumed_ignoring_payment_failure">Resumido el flujo, ignorando el error en el pago: %1$s</string>
+    <string name="continuation_resumed_ignoring_dialog_close">Resumido el flujo, ignorando el diálogo</string>
+    <string name="continuation_resumed_ignoring_dialog_failure">Resumido el flujo, ignorando el fallo al abrir el diálogo</string>
+
+    <!-- ApklisDataGetter -->
+    <string name="querying_apklis_data">Obteniendo datos desde la cuenta de Apklis…</string>
+    <string name="cursor_is_null_provider_not_available">El cursor está vacío - el provider puede no estar accesible</string>
+    <string name="cursor_returned_with_rows">El cursor respondió con %1$s filas</string>
+    <string name="retrieved_data">Obtenido: %1$s</string>
+    <string name="no_account_data_found">No se encontraron cuentas</string>
+    <string name="security_exception_missing_permission">Error de seguridad - falta el permiso: %1$s</string>
+    <string name="error_retrieving_account_data">Error obteniendo datos de la cuenta: %1$s</string>
+    <string name="apklis_provider_not_available">Provider de Apklis no disponible</string>
+
+    <!-- ApklisLicenseValidator -->
+    <string name="error_empty_license_uuid">El uuid de la licencia no puede estar vacío</string>
+    <string name="purchasing_license">Comprando licencia con UUID: %1$s</string>
+    <string name="purchase_response">Respuesta de la compra: %1$s</string>
+    <string name="no_response_from_purchase">No se recibió respuesta de la compra</string>
+    <string name="error_purchasing_license">Error comprando licencia: %1$s</string>
+    <string name="error_empty_package_id">El packageName de la app no puede estar vacío</string>
+    <string name="verifying_license">Verificando licencia para packageName: %1$s</string>
+    <string name="verification_response">Respuesta de la verificación: %1$s</string>
+    <string name="no_response_from_verification">No se recibió respuesta de la verificación</string>
+    <string name="error_verifying_license">Error verificando licencia: %1$s</string>
+
+    <!-- QRDialogManager -->
+
+    <!-- UI/General Strings -->
+    <string name="payment_successful">Pago Exitoso</string>
+    <string name="license_verified">Licencia Verificada</string>
+    <string name="status_paid">Pagado</string>
+    <string name="status_not_paid">No Pagado</string>
+    <string name="username_label">Usuario</string>
+</resources>

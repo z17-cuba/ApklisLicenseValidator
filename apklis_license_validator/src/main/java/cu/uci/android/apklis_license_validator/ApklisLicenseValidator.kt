@@ -42,14 +42,14 @@ class ApklisLicenseValidator {
             callback.onError(
                 LicenseError(
                     "INVALID_ARGUMENT",
-                    "License UUID cannot be empty",
+                    context.getString(R.string.error_empty_license_uuid),
                     null
                 )
             )
             return
         }
 
-        Log.d(TAG, "Purchasing license with UUID: $licenseUuid")
+        Log.d(TAG, context.getString(R.string.purchasing_license, licenseUuid))
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -58,7 +58,7 @@ class ApklisLicenseValidator {
                     licenseUuid
                 )
 
-                Log.d(TAG, "Purchase response: $response")
+                Log.d(TAG, context.getString(R.string.purchase_response, response))
 
                 withContext(Dispatchers.Main) {
                     if (response != null) {
@@ -67,19 +67,19 @@ class ApklisLicenseValidator {
                         callback.onError(
                             LicenseError(
                                 "PURCHASE_FAILED",
-                                "No response received from purchase operation",
+                                context.getString(R.string.no_response_from_purchase),
                                 null
                             )
                         )
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error purchasing license", e)
+                Log.e(TAG, context.getString(R.string.error_purchasing_license,e))
                 withContext(Dispatchers.Main) {
                     callback.onError(
                         LicenseError(
                             "PURCHASE_ERROR",
-                            "Failed to purchase license: ${e.message}",
+                            context.getString(R.string.error_purchasing_license,e.message),
                             e
                         )
                     )
@@ -103,14 +103,14 @@ class ApklisLicenseValidator {
             callback.onError(
                 LicenseError(
                     "INVALID_ARGUMENT",
-                    "Package ID cannot be empty",
+                    context.getString(R.string.error_empty_package_id),
                     null
                 )
             )
             return
         }
 
-        Log.d(TAG, "Verifying license for package: $packageId")
+        Log.d(TAG,context.getString(R.string.verifying_license,packageId))
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -119,7 +119,7 @@ class ApklisLicenseValidator {
                     packageId
                 )
 
-                Log.d(TAG, "Verification response: $response")
+                Log.d(TAG, context.getString(R.string.verification_response,response))
 
                 withContext(Dispatchers.Main) {
                     if (response != null) {
@@ -128,19 +128,19 @@ class ApklisLicenseValidator {
                         callback.onError(
                             LicenseError(
                                 "VERIFICATION_FAILED",
-                                "No response received from verification operation",
+                                context.getString(R.string.no_response_from_verification),
                                 null
                             )
                         )
                     }
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error verifying license", e)
+                Log.e(TAG, context.getString(R.string.error_verifying_license, e))
                 withContext(Dispatchers.Main) {
                     callback.onError(
                         LicenseError(
                             "VERIFY_ERROR",
-                            "Failed to verify license: ${e.message}",
+                            context.getString(R.string.error_verifying_license, e.message),
                             e
                         )
                     )

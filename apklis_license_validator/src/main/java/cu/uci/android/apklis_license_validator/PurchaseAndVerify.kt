@@ -1,7 +1,6 @@
 package cu.uci.android.apklis_license_validator
 
 import android.Manifest
-import android.accounts.AccountManager
 import android.content.Context
 import android.os.RemoteException
 import android.util.Log
@@ -20,14 +19,15 @@ import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class PurchaseAndVerify {
     companion object {
-        private const val TYPE = "cu.uci.android.apklis"
         private const val TAG = "PurchaseAndVerify"
         private const val SIGNATURE_HEADER_NAME = "signature"
 
         private val signatureVerificationService = SignatureVerificationService()
+
 
         @RequiresPermission(Manifest.permission.GET_ACCOUNTS)
         suspend fun purchaseLicense(context: Context, licenseUuid: String): Map<String, Any>? {
@@ -35,12 +35,13 @@ class PurchaseAndVerify {
 
             try {
                 WebSocketClient().apply {
-
+                    val  deviceLanguage = Locale.getDefault().language
 
                     val paymentResult = ApiService().payLicenseWithTF(
                         PaymentRequest(apklisAccountData?.deviceId ?: ""),
                         licenseUuid,
-                        apklisAccountData?.accessToken ?: ""
+                        apklisAccountData?.accessToken ?: "",
+                        deviceLanguage,
                     )
 
                     return when (paymentResult) {
@@ -55,9 +56,9 @@ class PurchaseAndVerify {
                             )
 
                             if (!isSignatureValid) {
-                                Log.w(TAG, "Signature verification failed for successful response")
+                                Log.w(TAG, context.getString(R.string.log_signature_verification_failed))
                                 return buildMap<String, Any> {
-                                    put("error", "Invalid response signature")
+                                    put("error", context.getString(R.string.error_invalid_response_signature))
                                     put("username", apklisAccountData?.username ?: "")
                                 }
                             } else {
@@ -71,7 +72,8 @@ class PurchaseAndVerify {
                             }
                         }
                         is ApiResult.Error -> {
-                            val errorMessage = "Error al efectuar el pago ${paymentResult.code}: ${paymentResult.message}"
+
+                            val errorMessage =   context.getString(R.string.error_payment_failed_with_code, paymentResult.code.toString(), paymentResult.message)
                             Log.e(TAG, errorMessage)
                             buildMap<String, Any> {
                                 put("error", paymentResult.message)
@@ -80,7 +82,8 @@ class PurchaseAndVerify {
                             }
                         }
                         is ApiResult.Exception -> {
-                            val errorMessage = "Excepción al efectuar el pago: ${paymentResult.throwable.message}"
+                            val errorMessage =  context.getString(R.string.error_payment_exception, paymentResult.throwable.message)
+
                             Log.e(TAG, errorMessage)
                             buildMap<String, Any> {
                                 put("error", errorMessage)
@@ -108,10 +111,11 @@ class PurchaseAndVerify {
 
             val webSocketClient = WebSocketClient(object : WebSocketEventListener {
                 override fun onConnected() {
-                    Log.d(TAG, "WebSocket connected successfully")
+
+                    Log.d(TAG, context.getString(R.string.websocket_connected))
                     // Now show the QR dialog since WebSocket is connected
                     if (!isResumed) {
-                        Log.d(TAG, "WebSocket connected, showing QR dialog")
+                        Log.d(TAG, context.getString(R.string.websocket_connected_showing_qr_dialog))
                         CoroutineScope(Dispatchers.Main).launch {
                             showQrDialogAfterConnection(context, qrCode, apklisAccountData?.username ?: "", continuation)
                         }
@@ -119,21 +123,21 @@ class PurchaseAndVerify {
                 }
 
                 override fun onDisconnected(reason: String?) {
-                    Log.d(TAG, "WebSocket disconnected: $reason")
+                    Log.d(TAG,  context.getString(R.string.websocket_disconnected, reason))
                 }
 
                 override fun onError(error: String) {
-                    Log.e(TAG, "WebSocket connection error: $error")
+                    Log.e(TAG,  context.getString(R.string.error_websocket_connection_failed, error))
                     // Resume with error if WebSocket fails to connect
                     if (!isResumed) {
                         isResumed = true
                          try {
                             continuation.resume(buildMap<String, Any> {
-                                put("error", "WebSocket connection failed: $error")
+                                put("error", context.getString(R.string.error_websocket_connection_failed, error))
                                 put("username", apklisAccountData?.username ?: "")
                             })
                         } catch (e: IllegalStateException) {
-                            Log.d(TAG, "Continuation already resumed, ignoring WebSocket error: $error")
+                            Log.e(TAG, context.getString(R.string.continuation_resumed_ignoring_websocket, error))
                         }
                     }
                 }
@@ -151,17 +155,17 @@ class PurchaseAndVerify {
 
 
             } catch (e: Exception) {
-                Log.e(TAG, "Error initializing WebSocket: ${e.message}")
+                Log.e(TAG, context.getString(R.string.error_websocket_init_failed, e.message))
                 if (!isResumed) {
                     isResumed = true
                      try {
                         continuation.resume(buildMap<String, Any> {
-                            put("error", "Failed to initialize WebSocket: ${e.message}")
+                            put("error", context.getString(R.string.error_websocket_init_failed, e.message))
                             put("username", apklisAccountData?.username ?: "")
                         })
                     } catch (ex: IllegalStateException) {
-                        Log.d(TAG, "Continuation already resumed, ignoring WebSocket initialization error")
-                    }
+                         Log.e(TAG, context.getString(R.string.continuation_resumed_ignoring_websocket, e.message))
+                     }
                 }
             }
         }
@@ -179,7 +183,7 @@ class PurchaseAndVerify {
             // Create payment callback to handle WebSocket messages
             val paymentCallback = object : PaymentResultCallback {
                 override fun onPaymentCompleted(licenseName: String) {
-                    Log.d(TAG, "Payment completed with license: $licenseName")
+                    Log.d(TAG, context.getString(R.string.payment_completed, licenseName))
                     if (continuation.isActive) {
                          try {
                             continuation.resume(buildMap {
@@ -189,13 +193,13 @@ class PurchaseAndVerify {
                                 put("username", username)
                             })
                         } catch (e: IllegalStateException) {
-                            Log.d(TAG, "Continuation already resumed, ignoring payment completion")
+                             Log.e(TAG, context.getString(R.string.continuation_resumed_ignoring_payment_completion,))
                         }
                     }
                 }
 
                 override fun onPaymentFailed(error: String) {
-                    Log.e(TAG, "Payment failed: $error")
+                    Log.e(TAG, context.getString(R.string.error_payment_failed,error))
                     if (continuation.isActive) {
                         try {
                             continuation.resume(buildMap {
@@ -204,23 +208,24 @@ class PurchaseAndVerify {
                                 put("username", username)
                             })
                         } catch (e: IllegalStateException) {
-                            Log.d(TAG, "Continuation already resumed, ignoring payment failure")
+                            Log.e(TAG, context.getString(R.string.continuation_resumed_ignoring_payment_failure,error))
                         }
                     }
                 }
 
                 override fun onDialogClosed() {
-                    Log.d(TAG, "Dialog was closed by user")
+                    Log.d(TAG,context.getString(R.string.dialog_closed_by_user) )
                     if (continuation.isActive) {
                         try {
                             continuation.resume(buildMap {
                                 put("success", false)
                                 put("paid", false)
-                                put("error", "Dialog closed by user")
+                                put("error", context.getString(R.string.dialog_closed_by_user) )
                                 put("username", username)
                             })
                         } catch (e: IllegalStateException) {
-                            Log.d(TAG, "Continuation already resumed, ignoring dialog close")
+                            Log.e(TAG, context.getString(R.string.continuation_resumed_ignoring_dialog_close,))
+
                         }
                     }
                 }
@@ -234,7 +239,7 @@ class PurchaseAndVerify {
             // Show the dialog
             qrDialogManager.showQrDialog(qrCode, qrData) { success ->
                 if (!success) {
-                    val errorMessage = "Failed to show dialog"
+                    val errorMessage = context.getString(R.string.error_failed_to_show_dialog,)
                     Log.e(TAG, errorMessage)
                     if (continuation.isActive) {
                           try {
@@ -244,7 +249,7 @@ class PurchaseAndVerify {
                                 put("username", username)
                             })
                         } catch (e: IllegalStateException) {
-                            Log.d(TAG, "Continuation already resumed, ignoring dialog show failure")
+                            Log.e(TAG, context.getString(R.string.continuation_resumed_ignoring_dialog_failure,) )
                         }
                     }
                 }
@@ -254,12 +259,14 @@ class PurchaseAndVerify {
         @RequiresPermission(Manifest.permission.GET_ACCOUNTS)
        suspend fun verifyCurrentLicense(context: Context, packageId: String): Map<String, Any>? {
              val apklisAccountData : ApklisAccountData? = ApklisDataGetter.getApklisAccountData(context)
+            val  deviceLanguage = Locale.getDefault().language
 
             try {
 
                     val verificationResult = ApiService().verifyCurrentLicense(
                         LicenseRequest( packageId,apklisAccountData?.deviceId ?: ""),
-                        apklisAccountData?.accessToken ?: ""
+                        apklisAccountData?.accessToken ?: "",
+                        deviceLanguage
                     )
 
                    return when (verificationResult) {
@@ -275,13 +282,13 @@ class PurchaseAndVerify {
                             )
 
                             if (!isSignatureValid) {
-                                Log.w(TAG, "Signature verification failed for successful response")
+                                Log.w(TAG,context.getString(R.string.log_signature_verification_failed,))
                                 return buildMap<String, Any> {
-                                    put("error", "Invalid response signature")
+                                    put("error",context.getString(R.string.error_invalid_response_signature,))
                                     put("username", apklisAccountData?.username ?: "")
                                 }
                             } else {
-                                Log.d(TAG, "Hay una licencia: $verificationResult");
+                                Log.d(TAG, context.getString(R.string.license_already_exists,verificationResult));
                                 val hasPaidLicense = verificationResult.data.license.isNotEmpty()
                                 buildMap<String, Any> {
                                     put("license", verificationResult.data.license)
@@ -292,7 +299,7 @@ class PurchaseAndVerify {
 
                         }
                         is ApiResult.Error -> {
-                            val errorMessage = "Fallo al efectuar la verificación ${verificationResult.code}: ${verificationResult.message}"
+                            val errorMessage =context.getString(R.string.error_verification_failed_with_code,verificationResult.code.toString(), verificationResult.message)
                             Log.e(TAG, errorMessage)
                             buildMap<String, Any> {
                                 put("error", verificationResult.message)
@@ -301,7 +308,7 @@ class PurchaseAndVerify {
                             }
                         }
                         is ApiResult.Exception -> {
-                            val errorMessage = "Fallo al efectuar la verificación: ${verificationResult.throwable.message}"
+                            val errorMessage = context.getString(R.string.error_verification_exception,verificationResult.throwable.message)
                             Log.e(TAG, errorMessage)
                             buildMap<String, Any> {
                                 put("error", errorMessage)
@@ -329,7 +336,7 @@ class PurchaseAndVerify {
             val signatureValue = headers?.get(SIGNATURE_HEADER_NAME)
 
             if (signatureValue.isNullOrEmpty()) {
-                Log.w(TAG, "No signature header found in response")
+                Log.e(TAG, context.getString(R.string.log_no_signature_header))
                 return false
             }
 
