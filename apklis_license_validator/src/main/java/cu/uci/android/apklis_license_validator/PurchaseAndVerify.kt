@@ -51,6 +51,8 @@ class PurchaseAndVerify {
                             val responseBodyString = when (responseData) {
                                 is PaymentResponse.Qr -> responseData.qrCode.toJsonString()
                                 is PaymentResponse.DirectLicense -> responseData.license.toJsonString()
+                                // Add else branch to make 'when' exhaustive
+                                else -> ""
                             }
 
                             when (responseData) {
@@ -85,6 +87,11 @@ class PurchaseAndVerify {
                                         put("license", responseData.license.license ?: "")
                                         put("username", apklisAccountData?.username ?: "")
                                     }
+                                }
+                                // Add else branch to make 'when' exhaustive
+                                else -> {
+                                    // Should not happen with a sealed class, but required for exhaustiveness
+                                    return buildMap { put("error",context.getString(R.string.error_purchasing_license)) }
                                 }
                             }
                         }
@@ -306,9 +313,9 @@ class PurchaseAndVerify {
                                 }
                             } else {
                                 Log.d(TAG, context.getString(R.string.license_already_exists,verificationResult));
-                                val hasPaidLicense = verificationResult.data.license.isNotEmpty()
+                                val hasPaidLicense = !verificationResult.data.license.isNullOrEmpty()
                                 buildMap<String, Any> {
-                                    put("license", verificationResult.data.license)
+                                    put("license", verificationResult.data.license ?: "")
                                     put("paid", hasPaidLicense)
                                     put("username", apklisAccountData?.username ?: "")
                                 }

@@ -3,8 +3,9 @@ package cu.uci.android.apklis_license_validator.api_helpers
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import cu.uci.android.apklis_license_validator.models.LicenseRequest
+import cu.uci.android.apklis_license_validator.models.PaymentRequest
+import cu.uci.android.apklis_license_validator.models.PaymentResponse
 import cu.uci.android.apklis_license_validator.models.QrCode
-import cu.uci.android.apklis_license_validator.models.PaidLicenseResponse
 import cu.uci.android.apklis_license_validator.models.VerifyLicenseResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,8 +13,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
-import okio.IOException
-import cu.uci.android.apklis_license_validator.models.PaymentRequest
+import okio.IOException 
 import java.util.concurrent.TimeUnit
 
 class ApiService {
@@ -57,25 +57,21 @@ class ApiService {
                     response.isSuccessful -> {
                         val responseBody = response.body?.string()
                         if (responseBody != null) {
+                            val headers = response.headers.toMap()
+                            // Try to parse as VerifyLicenseResponse first.
+                            // If it succeeds and contains license info, it's a direct license.
                             try {
-                                val headers = response.headers.toMap()
-                                // Try to parse as VerifyLicenseResponse first.
-                                // If it succeeds and contains license info, it's a direct license.
-                                val licenseResponse = try {
-                                    gson.fromJson(responseBody, VerifyLicenseResponse::class.java)
-                                } catch (e: JsonSyntaxException) {
-                                    null
-                                }
+                                val licenseResponse = gson.fromJson(responseBody, VerifyLicenseResponse::class.java)
                                 if (licenseResponse?.license != null || licenseResponse?.expireIn != null) {
                                     return@withContext ApiResult.Success(PaymentResponse.DirectLicense(licenseResponse), headers)
                                 }
-                            
-                                // Otherwise, parse as QrCode
-                                val qrCode = gson.fromJson(responseBody, QrCode::class.java)
-                                ApiResult.Success(PaymentResponse.Qr(qrCode), headers)
-                            } catch (e: Exception) {
-                                ApiResult.Exception(e)
+                            } catch (e: JsonSyntaxException) {
+                                // It's not a direct license, so we'll try to parse it as a QR code next.
                             }
+
+                            // Otherwise, parse as QrCode
+                            val qrCode = gson.fromJson(responseBody, QrCode::class.java)
+                            return@withContext ApiResult.Success(PaymentResponse.Qr(qrCode), headers)
                         } else {
                             ApiResult.Error(response.code, "Empty response body" )
                         }
