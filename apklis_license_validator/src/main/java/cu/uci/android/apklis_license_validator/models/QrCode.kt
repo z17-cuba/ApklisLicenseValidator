@@ -17,5 +17,4 @@ data class QrCode(
     fun toJsonString(): String {
         return """{"id_transaccion": "$idTransaccion", "importe": "$importe", "moneda": "$moneda", "numero_proveedor": "$numeroProveedor", "version": "$version"}"""
     }
-
 }
