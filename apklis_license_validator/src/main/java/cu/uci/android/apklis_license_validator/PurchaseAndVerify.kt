@@ -6,6 +6,7 @@ import android.os.RemoteException
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import cu.uci.android.apklis_license_validator.api_helpers.ApiResult
+import cu.uci.android.apklis_license_validator.models.PaymentResponse
 import cu.uci.android.apklis_license_validator.api_helpers.ApiService
 import cu.uci.android.apklis_license_validator.models.ApklisAccountData
 import cu.uci.android.apklis_license_validator.models.LicenseRequest
@@ -46,29 +47,45 @@ class PurchaseAndVerify {
 
                     return when (paymentResult) {
                         is ApiResult.Success -> {
-                            val qrCode : QrCode = paymentResult.data
+                            val responseData = paymentResult.data
+                            val responseBodyString = when (responseData) {
+                                is PaymentResponse.Qr -> responseData.qrCode.toJsonString()
+                                is PaymentResponse.DirectLicense -> responseData.license.toJsonString()
+                            }
 
-                            // Verify signature only on successful response
-                            val isSignatureValid = verifySignatureIfPresent(
-                                context,
-                                qrCode.toJsonString(),
-                                paymentResult.headers
-                            )
+                            when (responseData) {
+                                is PaymentResponse.Qr -> {
+                                    // Verify signature only on successful response
+                                    val isSignatureValid = verifySignatureIfPresent(
+                                        context,
+                                        responseBodyString,
+                                        paymentResult.headers
+                                    )
 
-                            if (!isSignatureValid) {
-                                Log.w(TAG, context.getString(R.string.log_signature_verification_failed))
-                                return buildMap<String, Any> {
-                                    put("error", context.getString(R.string.error_invalid_response_signature))
-                                    put("username", apklisAccountData?.username ?: "")
+                                    if (!isSignatureValid) {
+                                        Log.w(TAG, context.getString(R.string.log_signature_verification_failed))
+                                        return buildMap {
+                                            put("error", context.getString(R.string.error_invalid_response_signature))
+                                            put("username", apklisAccountData?.username ?: "")
+                                        }
+                                    }
+
+                                    // It's a QR code, proceed with the dialog flow
+                                    return handleWebSocketAndQrDialog(
+                                        context,
+                                        responseData.qrCode,
+                                        apklisAccountData
+                                    )
                                 }
-                            } else {
-                                // Handle WebSocket connection and QR dialog
-                                return handleWebSocketAndQrDialog(
-                                    context,
-                                    qrCode,
-                                    apklisAccountData
-                                )
-
+                                is PaymentResponse.DirectLicense -> {
+                                    // It's a direct license, return success immediately
+                                    return buildMap {
+                                        put("success", true)
+                                        put("paid", true)
+                                        put("license", responseData.license.license ?: "")
+                                        put("username", apklisAccountData?.username ?: "")
+                                    }
+                                }
                             }
                         }
                         is ApiResult.Error -> {
