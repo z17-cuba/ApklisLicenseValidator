@@ -11,13 +11,13 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 ```
-2. A continuación, dirígete a [la página web de Jitpack](https://jitpack.io/#z17-Cuba/ApklisLicenseValidator) para comprobar cuál es la última versión de la librería e importarla a tu aplicación.
+2. A continuación, dirígete a [la página web de Jitpack](https://jitpack.io/#z17-cuba/ApklisLicenseValidator) para comprobar cuál es la última versión de la librería e importarla a tu aplicación.
 La última versión hasta la fecha es:
 
 ```gradle
 dependencies {
     //Recuerda siempre consultar la última versión de la biblioteca.
-   implementation("com.github.z17-Cuba:ApklisLicenseValidator:v.1.0.1")
+   implementation("com.github.z17-cuba:ApklisLicenseValidator:v.1.0.2")
 }
 ```
 
