@@ -304,6 +304,23 @@ Entonces se sugiere agregar esta línea en el Android Manifest de su aplicación
 </queries>
 ```
 
+## Android 16
+Aplica para el mismo error de arriba pero para dispositivos con Android 16.
+Fue probado y funciona con un Google Pixel 8 y en un Samsung S24
+```xml
+
+    <queries>
+        <intent> 
+            <action android:name="android.accounts.AccountAuthenticator" /> 
+        </intent> 
+        <intent> 
+            <action android:name="android.intent.action.VIEW" /> 
+            <data android:scheme="apklis" /> 
+        </intent> 
+    </queries>
+```
+
+
 ## Ejemplo completo
 A continuación se muestra un ejemplo completo que muestra ambos métodos en una actividad de Android:
 
