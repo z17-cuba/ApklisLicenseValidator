@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">Apklis License Validator Lib</string>
     <string name="abrir_transfermovil">Open Transfermóvil</string>
     <string name="cerrar">Close</string>
     <string name="codigo_qr_de_pago">QR Payment Code</string>

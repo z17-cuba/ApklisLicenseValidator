@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Validador de licencias de Apklis</string>
     <string name="abrir_transfermovil">Abrir Transfermóvil</string>
     <string name="cerrar">Cerrar</string>
     <string name="codigo_qr_de_pago">Código QR de Pago</string>
