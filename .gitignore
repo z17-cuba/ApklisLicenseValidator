@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+/.atl/.skill-registry.cache.json
+/.atl/skill-registry.md
+/CLAUDE.md
+/.kotlin/
