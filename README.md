@@ -37,6 +37,7 @@ Cree una instancia de `ApklisLicenseValidator` y llame a los métodos que contie
 ```kotlin
 val validator = ApklisLicenseValidator()
 
+// Sin webhook
 validator.purchaseLicense(context, "your-license-uuid", object : LicenseCallback {
 override fun onSuccess(response: Map<String, Any>) {
 // License purchased successfully
@@ -76,6 +77,22 @@ Log.d("License", "Purchase successful: $response")
         }
     }
 })
+
+// Con webhook opcional
+validator.purchaseLicense(
+    context,
+    "your-license-uuid",
+    "https://tu-servidor.com/webhook",
+    object : LicenseCallback {
+        override fun onSuccess(response: Map<String, Any>) {
+            // ...
+        }
+
+        override fun onError(error: LicenseError) {
+            // ...
+        }
+    }
+)
 ```
 
 #### Verificar licencia activa

@@ -31,7 +31,7 @@ class PurchaseAndVerify {
 
 
         @RequiresPermission(Manifest.permission.GET_ACCOUNTS)
-        suspend fun purchaseLicense(context: Context, licenseUuid: String): Map<String, Any>? {
+        suspend fun purchaseLicense(context: Context, licenseUuid: String, webhookUrl: String? = null): Map<String, Any>? {
             val apklisAccountData : ApklisAccountData? = ApklisDataGetter.getApklisAccountData(context)
 
             try {
@@ -39,7 +39,7 @@ class PurchaseAndVerify {
                     val  deviceLanguage = Locale.getDefault().language
 
                     val paymentResult = ApiService().payLicenseWithTF(
-                        PaymentRequest(apklisAccountData?.deviceId ?: ""),
+                        PaymentRequest(apklisAccountData?.deviceId ?: "", webhookUrl),
                         licenseUuid,
                         apklisAccountData?.accessToken ?: "",
                         deviceLanguage,
