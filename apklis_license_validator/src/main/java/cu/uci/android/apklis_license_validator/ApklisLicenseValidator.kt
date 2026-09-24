@@ -34,8 +34,25 @@ class ApklisLicenseValidator {
      * @param callback Callback to receive the result
      */
     fun purchaseLicense(
-         context: Context,
+        context: Context,
         licenseUuid: String,
+        callback: LicenseCallback
+    ) {
+        purchaseLicense(context, licenseUuid, null, callback)
+    }
+
+    /**
+     * Purchase a license with the given UUID, asking Apklis to notify [webhookUrl]
+     * once the payment is confirmed
+     * @param context Android context
+     * @param licenseUuid The UUID of the license to purchase
+     * @param webhookUrl URL Apklis calls after the payment is confirmed, or null for none
+     * @param callback Callback to receive the result
+     */
+    fun purchaseLicense(
+        context: Context,
+        licenseUuid: String,
+        webhookUrl: String?,
         callback: LicenseCallback
     ) {
         if (licenseUuid.isBlank()) {
@@ -55,7 +72,8 @@ class ApklisLicenseValidator {
             try {
                 val response: Map<String, Any>? = PurchaseAndVerify.purchaseLicense(
                     context,
-                    licenseUuid
+                    licenseUuid,
+                    webhookUrl
                 )
 
                 Log.d(TAG, context.getString(R.string.purchase_response, response))
@@ -192,7 +210,25 @@ object ApklisLicenseUtils {
         licenseUuid: String,
         callback: LicenseCallback
     ) {
-        ApklisLicenseValidator().purchaseLicense(context, licenseUuid, callback)
+        ApklisLicenseValidator().purchaseLicense(context, licenseUuid, null, callback)
+    }
+
+    /**
+     * Static method to purchase a license, asking Apklis to notify [webhookUrl]
+     * once the payment is confirmed
+     * @param context Android context
+     * @param licenseUuid The UUID of the license to purchase
+     * @param webhookUrl URL Apklis calls after the payment is confirmed, or null for none
+     * @param callback Callback to receive the result
+     */
+    @JvmStatic
+    fun purchaseLicense(
+        context: Context,
+        licenseUuid: String,
+        webhookUrl: String?,
+        callback: LicenseCallback
+    ) {
+        ApklisLicenseValidator().purchaseLicense(context, licenseUuid, webhookUrl, callback)
     }
 
     /**
