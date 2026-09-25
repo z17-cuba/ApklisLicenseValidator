@@ -24,11 +24,13 @@
 # so the host app's shrinker can't see that usage and would otherwise strip/rename it.
 -keep class cu.uci.android.apklis_license_validator.WebSocketService { *; }
 
-# Gson deserializes these via reflection using field names/@SerializedName; keep them
-# so the host app's minification doesn't rename fields and silently break JSON parsing.
+# Gson deserializes these via reflection (fromJson targets QrCode and
+# VerifyLicenseResponse directly, both via field names/@SerializedName). Keeping only
+# <fields> is not enough: a class with no call-graph usage the shrinker can see (its
+# fields are only ever read through Gson's reflection) can still get stripped down to an
+# empty shell, which Gson then reports as an "abstract class" it can't instantiate - hit
+# for real in this library's own release AAR (see git history for the fix).
 -keepattributes Signature,*Annotation*
--keepclassmembers class cu.uci.android.apklis_license_validator.models.** {
-    <fields>;
-}
+-keep class cu.uci.android.apklis_license_validator.models.** { *; }
 -keep class cu.uci.android.apklis_license_validator.models.PaymentResponse { *; }
 -keep class cu.uci.android.apklis_license_validator.models.PaymentResponse$* { *; }

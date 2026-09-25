@@ -43,11 +43,15 @@
 # never called directly - R8 can't see that usage and would otherwise strip/rename it.
 -keep class cu.uci.android.apklis_license_validator.WebSocketService { *; }
 
-# Gson deserializes these via reflection using field names/@SerializedName; keep them
-# so minification doesn't rename fields and silently break JSON parsing.
+# Gson deserializes these via reflection (fromJson targets QrCode and
+# VerifyLicenseResponse directly, both via field names/@SerializedName). Keeping only
+# <fields> is not enough: without keeping the class itself, R8's shrinker can still
+# decide a class with no traceable call-graph usage (like VerifyLicenseResponse, whose
+# fields are only ever read through Gson's reflection, invisible to R8) has no reachable
+# constructor and strip it down to an empty shell - which Gson then reports as an
+# "abstract class" it can't instantiate. QrCode happened to survive only because it
+# separately carries a @Keep annotation; VerifyLicenseResponse did not.
 -keepattributes Signature,*Annotation*
--keepclassmembers class cu.uci.android.apklis_license_validator.models.** {
-    <fields>;
-}
+-keep class cu.uci.android.apklis_license_validator.models.** { *; }
 -keep class cu.uci.android.apklis_license_validator.models.PaymentResponse { *; }
 -keep class cu.uci.android.apklis_license_validator.models.PaymentResponse$* { *; }
