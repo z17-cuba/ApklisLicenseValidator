@@ -85,6 +85,7 @@ class PurchaseAndVerify {
                                         put("success", true)
                                         put("paid", true)
                                         put("license", responseData.license.license ?: "")
+                                        responseData.license.expireIn?.let { put("expire_in", it) }
                                         put("username", apklisAccountData?.username ?: "")
                                     }
                                 }
@@ -317,6 +318,7 @@ class PurchaseAndVerify {
                                 buildMap<String, Any> {
                                     put("license", verificationResult.data.license ?: "")
                                     put("paid", hasPaidLicense)
+                                    verificationResult.data.expireIn?.let { put("expire_in", it) }
                                     put("username", apklisAccountData?.username ?: "")
                                 }
                             }

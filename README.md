@@ -221,6 +221,8 @@ mapOf(
     "paid" to true,
     "license" to "license-name-string",
     "username" to "user-account-name"
+    // "expire_in" (fecha de fin, ISO-8601) solo llega si la licencia se concede directamente; en el pago por QR no viene:
+    // verifica después con verifyCurrentLicense para leerla.
 )
 
 // El usuario ha cerrado el cuadro de diálogo de pago
@@ -247,6 +249,7 @@ Si la verificación se realiza correctamente, la respuesta contiene:
 mapOf(
     "license" to "license-name-string",
     "paid" to true,
+    "expire_in" to "2026-11-14T11:58:11.089210-05:00", // fecha de fin (ISO-8601); solo si Apklis la envía
     "username" to "user-account-name"
 )
 
